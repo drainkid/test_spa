@@ -109,8 +109,8 @@ const AddModal: React.FC<AddModalProps> = ({ open, onClose, onSubmit }) => {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleSubmit}>Add</Button>
+                <Button onClick={onClose}>закрыть</Button>
+                <Button onClick={handleSubmit}>добавить</Button>
             </DialogActions>
         </Dialog>
     );

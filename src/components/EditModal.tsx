@@ -115,8 +115,8 @@ const EditModal: React.FC<EditModalProps> = ({ open, handleClose, initialData, h
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleSaveClick}>Save</Button>
+                <Button onClick={handleClose}>закрыть</Button>
+                <Button onClick={handleSaveClick}>сохранить</Button>
             </DialogActions>
 
         </Dialog>

@@ -8,7 +8,7 @@ import {store} from "./redux/store.ts";
 const App = () => {
     return (
         <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.DEV ? '/' : '/test/'}>
             <Routes>
                 <Route path="/" element={<LoginPage/>} />
                 <Route path="/main" element={<MainPage/>} />

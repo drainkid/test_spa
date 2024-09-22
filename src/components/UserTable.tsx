@@ -3,23 +3,25 @@ import {userRecord} from "../types.ts"
 import {DataGrid, GridRowSelectionModel} from '@mui/x-data-grid';
 import {FC, useState} from "react";
 import EditModal from "./EditModal.tsx";
+import {useAppDispatch, useAppSelector} from "../redux/hooks.ts";
+import {setUserData} from "../redux/slices/userSlice.ts";
 
 
 interface userTableProps {
-    userData: userRecord[]
     handleOpen : () => void
     updateData: (newData: userRecord[], selectedId: userRecord[], id: GridRowSelectionModel) => void;
-    setUserData: (newData: userRecord[]) => void;
     editRequest: (id: GridRowSelectionModel, updatedRecord: userRecord) => void;
 
 }
 
 
-const UserTable: FC<userTableProps> = ({ userData,handleOpen , updateData, setUserData,editRequest}) => {
+const UserTable: FC<userTableProps> = ({handleOpen , updateData, editRequest}) => {
 
     const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
     const [editingRecord, setEditingRecord] = useState<userRecord | null>(null);
     const [editModalOpen, setEditModalOpen] = useState(false);
+    const userData = useAppSelector(state => state.users.userData)
+    const dispatch = useAppDispatch()
 
     const handleDelete = () => {
         if (userData) {
@@ -36,12 +38,12 @@ const UserTable: FC<userTableProps> = ({ userData,handleOpen , updateData, setUs
             setEditingRecord(recordToEdit);
             setEditModalOpen(true);
         }
-    };
+    }
 
     const handleSaveEditedRecord = (updatedRecord: userRecord) => {
-        setUserData(userData?.map(record =>
+       dispatch(setUserData(userData?.map(record =>
             record.id === updatedRecord.id ? updatedRecord : record
-        ) || [])
+        ) || []))
         editRequest(selectedRows, updatedRecord)
     };
 
@@ -107,7 +109,6 @@ const UserTable: FC<userTableProps> = ({ userData,handleOpen , updateData, setUs
                 </Container>
 
             )}
-
             <EditModal
                 open={editModalOpen}
                 handleClose={() => setEditModalOpen(false)}

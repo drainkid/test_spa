@@ -41,6 +41,7 @@ const AddModal: React.FC<AddModalProps> = ({ open, onClose, onSubmit }) => {
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Добавить запись</DialogTitle>
+
             <DialogContent>
                 <TextField
                     margin="dense"
@@ -108,10 +109,12 @@ const AddModal: React.FC<AddModalProps> = ({ open, onClose, onSubmit }) => {
                     onChange={handleInputChange}
                 />
             </DialogContent>
+
             <DialogActions>
                 <Button onClick={onClose}>закрыть</Button>
                 <Button onClick={handleSubmit}>добавить</Button>
             </DialogActions>
+
         </Dialog>
     );
 };

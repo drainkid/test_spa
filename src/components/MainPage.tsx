@@ -3,13 +3,16 @@ import axios, {AxiosResponse} from "axios";
 import UserTable from "./UserTable.tsx";
 import {userRecord} from "../types.ts";
 import AddModal from "./AddModal.tsx";
+import {useAppDispatch, useAppSelector} from "../redux/hooks.ts";
+import {addUserData, removeUserData, setUserData} from "../redux/slices/userSlice.ts";
 
 const MainPage = () => {
 
     const HOST = 'https://test.v5.pryaniky.com'
     const token = localStorage.getItem("access_token");
-    const [userData, setUserData] = useState<userRecord[] | null>(null);
+    const userData = useAppSelector(state => state.users.userData)
     const [open, setOpen] = useState(false);
+    const dispatch = useAppDispatch();
 
 
     useEffect(() => {
@@ -20,15 +23,16 @@ const MainPage = () => {
                 }
             })
                 .then((response: AxiosResponse<{ data: [] }>) => {
-                    setUserData(response.data.data);
+                    dispatch(setUserData(response.data.data));
                 })
                 .catch(error => {
                     alert(`Ошибка получения данных: ${error}`);
                 });
-        } else {
+        }
+        else {
             alert('Токен отсутствует');
         }
-    }, [token]);
+    }, [dispatch, token]);
 
     const generateRandomId = (length: number = 8): string => {
         const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -39,19 +43,10 @@ const MainPage = () => {
         return result;
     };
 
-    const handleAddOpen = () => {
-        setOpen(true)
-    };
-
-    const handleAddClose = () => {
-        setOpen(false)
-    }
-
-
     const handleUpdateAndDeleteData = async (newData: userRecord[], currentId: userRecord[], id:unknown) => {
 
         const prevData = [...userData || []]
-        setUserData(newData);
+        dispatch(setUserData(newData))
          try {
             await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/delete/${id}`,
                  {currentId},
@@ -59,7 +54,7 @@ const MainPage = () => {
                  })
          }
          catch(error) {
-             setUserData(prevData)
+             dispatch(setUserData(prevData))
              alert(error)
          }
     }
@@ -81,7 +76,7 @@ const MainPage = () => {
             companySigDate: formValues.employeeSigDate,
         }
 
-        setUserData(userData ? [...userData, record] : [record])
+        dispatch(addUserData(record))
 
         try {
             const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/create`,
@@ -92,15 +87,15 @@ const MainPage = () => {
             )
 
             const newData = res.data.data
-            setUserData(userData ? [...userData, newData] : [newData]) //запись с обновленным id
+            dispatch(setUserData(userData ? [...userData, newData] : [newData]))
         }
 
         catch (error) {
-            setUserData(userData?.filter(record => record.id !== tempId) || []);
+            dispatch(removeUserData(tempId))
             alert(`Ошибка при создании записи: ${error}`);
         }
         finally {
-            handleAddClose()
+            setOpen(false)
         }
     }
 
@@ -118,15 +113,14 @@ const MainPage = () => {
 
         <div>
 
-          <UserTable userData={userData ?? []} handleOpen = {handleAddOpen}
+          <UserTable handleOpen = {()=> setOpen(true)}
                      updateData = {handleUpdateAndDeleteData}
-                     setUserData={setUserData}
                      editRequest = {editRequest}
           />
 
-            <AddModal open={open}
-                      onClose={handleAddClose}
-                      onSubmit={addRecord}
+          <AddModal open={open}
+                    onClose={()=> setOpen(false)}
+                    onSubmit={addRecord}
             />
 
         </div>

@@ -9,7 +9,7 @@ export default defineConfig(({ command }) => {
   };
 
   if (command !== 'serve') {
-    config.base = '/test/';
+    config.base = '/test_spa/';
   }
 
   return config;

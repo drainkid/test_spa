@@ -8,7 +8,7 @@ import {store} from "./redux/store.ts";
 const App = () => {
     return (
         <Provider store={store}>
-        <HashRouter basename={'test_spa'}>
+        <HashRouter>
             <Routes>
                 <Route path="/" element={<LoginPage/>} />
                 <Route path="/main" element={<MainPage/>} />

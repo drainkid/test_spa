@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig(({ command }) => {
   const config = {
     plugins: [react()],
-    base: '/test',
+    base: '/test_spa',
   };
 
   if (command !== 'serve') {

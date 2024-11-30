@@ -5,26 +5,7 @@
     <title>React Router</title>
 </head>
 <body>
-<script type="text/javascript">
-    // Перенаправление только для случаев, когда путь не содержит "#"
-    if (!window.location.hash) {
-        var pathSegmentsToKeep = 1;
-        var l = window.location;
-        l.replace(
-            l.protocol +
-            "//" +
-            l.hostname +
-            (l.port ? ":" + l.port : "") +
-            l.pathname
-                .split("/")
-                .slice(0, 1 + pathSegmentsToKeep)
-                .join("/") +
-            "/#/" +
-            l.pathname.slice(1).split("/").slice(pathSegmentsToKeep).join("/") +
-            l.search +
-            l.hash
-        );
-    }
-</script>
+<div id="root"></div>
+<script type="module" src="/test_spa/assets/index.js"></script>
 </body>
 </html>
